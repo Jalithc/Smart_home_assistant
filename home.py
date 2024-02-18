@@ -9,15 +9,15 @@ engine.setProperty('voice', voices[1].id)
 
 class SmartHome:
     def __init__(self):
-        self.doors = ["main door"]
-        self.lights = ["main light"]
+        self.doors = []
+        self.lights = []
         self.temperature = 25  # Default
 
-    # add door name to the list
+    # add door object to the list
     def add_doors(self, door):
         self.doors.append(door)
 
-    # add light name to the list
+    # add light object to the list
     def add_lights(self, light):
         self.lights.append(light)
     
@@ -72,11 +72,11 @@ class Door:
 
     def door_open(self):
         self.is_open = True
-        speak_audio(f"{self.name} Door is opened...")
+        speak_audio(f"{self.name} is opened...")
 
     def door_close(self):
         self.is_open = False
-        speak_audio(f"{self.name} Door is closed...")
+        speak_audio(f"{self.name} is closed...")
 
 # for speak words
 def speak_audio(audio):
@@ -114,19 +114,15 @@ def main():
         if "adding" in query:
             if "door" in query:
                 door_name = query.split("adding")[1].strip()
-                home.add_doors(door_name)
+                door_object = Door(door_name)  # Create a Door object
+                home.add_doors(door_object)
                 speak_audio(f"{door_name} added successfully.")
 
         if "open" in query:
-            for door in home.doors:
-                if door in query:
-                    home.open_door()
-                    break
+            home.open_door()
+
         if "on" in query:
-            for light in home.lights:
-                if light in query:
-                    home.turn_on_lights()
-                    break
+            home.turn_on_lights()
 
         if "temperature" in query:
             if "set" in query:
