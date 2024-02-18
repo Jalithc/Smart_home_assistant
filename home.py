@@ -44,7 +44,7 @@ class SmartHome:
     # set temperature
     def set_temperature(self, temperature):
         self.temperature = temperature
-        print(f"Temperature set to {self.temperature} °C")
+        speak_audio(f"Temperature set to {self.temperature} °C")
 
     # get current temperature
     def get_temperature(self):
@@ -58,11 +58,11 @@ class Light:
 
     def turn_on(self):
         self.is_on = True
-        print(f"{self.name} Lights are turned on...")
+        speak_audio(f"{self.name} Lights are turned on...")
 
     def turn_off(self):
         self.is_on = False
-        print(f"{self.name} Lights are turned off...")
+        speak_audio(f"{self.name} Lights are turned off...")
 
 # class for door open / close
 class Door:
@@ -72,11 +72,11 @@ class Door:
 
     def door_open(self):
         self.is_open = True
-        print(f"{self.name} Door is opened...")
+        speak_audio(f"{self.name} Door is opened...")
 
     def door_close(self):
         self.is_open = False
-        print(f"{self.name} Door is closed...")
+        speak_audio(f"{self.name} Door is closed...")
 
 # for speak words
 def speak_audio(audio):
@@ -98,7 +98,8 @@ def take_command():
     except Exception as e:
         print(e)
         speak_audio("I didn't understand.")
-        return "None"
+        return 0
+
     return query
 
 def main():
@@ -119,21 +120,18 @@ def main():
         if "open" in query:
             for door in home.doors:
                 if door in query:
-                    speak_audio(f"{door} Door is opened")
                     home.open_door()
                     break
         if "on" in query:
             for light in home.lights:
                 if light in query:
-                    speak_audio(f"{light} is turned on")
                     home.turn_on_lights()
                     break
 
         if "temperature" in query:
             if "set" in query:
-                temperature = int(query.split("set")[1].strip().split("degrees")[0])
+                temperature = query.split("set")[1].strip().split("degrees")[0]
                 home.set_temperature(temperature)
-                break
 
         elif "bye" in query:
             speak_audio("Ok, bye")
